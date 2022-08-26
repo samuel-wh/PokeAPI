@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from django.views.generic import TemplateView
-from services import get_detalles, get_pokemones
+from django.views.generic import ListView, TemplateView
+from services import get_pokemones, get_sprite
 
 
 # Create your views here.
@@ -15,10 +15,13 @@ def index(request):
 
 class GetPokemones(TemplateView):
     template_name = 'pokemon/pokemon_listar.html'
-
+    
     def get_context_data(self, *args, **kwargs):
         context = {
             'pokemones': get_pokemones(),
-            'detalles' : get_detalles(),
+
         }
         return context
+
+class PokemonDetalles(TemplateView):
+    template_name = 'pokemon/pokemon_detalles.html'
