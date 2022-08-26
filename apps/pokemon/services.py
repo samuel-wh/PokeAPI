@@ -1,30 +1,7 @@
+
 import requests
 # Funcion para obtener la lista de los pokemones
-def get_pokemones():
-    # Endpoint
-    url = "https://pokeapi.co/api/v2/pokemon/?limit=10"
-    response = requests.get(url)
-    pokemones = response.json()
-    pokemon_list = []
-    for i in range(len(pokemones['results'])):
-        pokemon_list.append(pokemones['results'][i])
-    return pokemon_list
 
-def get_sprite(pokemon_list):
-    for pokemones in pokemon_list:
-        # Almacenamos el nombre
-        pokemon_name = pokemones['name']
-        # Cambiamos el endpoint con el nombre del pokemon para obtener los detalles
-        url = "https://pokeapi.co/api/v2/pokemon/{}".format(pokemon_name)
-        response = requests.get(url)
-        if response.status_code == 200:
-            # Obtenemos el json del endpoint
-            payload = response.json()
-            sprites = payload.get('sprites')
-            sprite = sprites['front_default']
-            sprite_list = []
-            sprite_list.append(sprite)         
-    return sprite_list
 
 
 
@@ -65,8 +42,7 @@ def get_detalles(pokemon_list):
         details_list = []
 
 
-
-
+                
 
             
             

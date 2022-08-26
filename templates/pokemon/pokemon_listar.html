@@ -3,22 +3,28 @@
   <h3>Lista de Pokemones</h3>
 </div>
 
-{% if pokemones %}
-{% for pokemon in pokemones%}
+{% if pokemon %}
+{% for pokemon in pokemon%}
 <div class="row p-3 text-center">
   <div class="col-sm-12">
     <div class="card">
       <div class="card-body">
         <h5 class="card-title">{{pokemon.name}}</h5>
         <div class="text-center">
-          <img src="{{detalles.front_default}}" class="rounded" alt="...">
+          <img src="{{pokemon.sprite}}" class="rounded" alt="...">
         </div>
-        <a href="{%url 'pokemon-detalles' %}" class="btn btn-primary">Ver pokemon</a>
+        <a href="#" class="btn btn-primary">Ver pokemon</a>
       </div>
     </div>
   </div>
 </div>
 {%endfor%}
+<div class="col-sm-12">
+  <div class="row p-20 text-center">
+    <a href="#" class="btn btn-primary">Ver pokemon</a>
+  </div>
+</div>
+
 {% else %}
 <h1>No hay registros de solicitudes</h1>
 {% endif %}{% endblock %}

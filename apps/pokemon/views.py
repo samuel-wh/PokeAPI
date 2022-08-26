@@ -1,6 +1,5 @@
 from django.shortcuts import render
-from django.views.generic import ListView, TemplateView
-from services import get_pokemones, get_sprite
+import requests
 
 
 # Create your views here.
@@ -8,20 +7,29 @@ def index(request):
     return render(request, 'base/index.html')
 
 
-""" def pokemon_list(requests):
-    context = {'names': get_name()}
-    return render(requests, 'pokemon/pokemon_listar.html', context) """
+def pokemon_list(request):
+    # Endpoint
+    url = "https://pokeapi.co/api/v2/pokemon/?limit=10"
+    response = requests.get(url)
+    if response.status_code == 200:
+        payload = response.json()
+        results = payload.get('results',[])
+        if results:
+            pokemon_info = []
+            dir = {}
+            for pokemon in results:
+                name = pokemon['name']
+                response = requests.get(pokemon['url'])
+                if response.status_code == 200:
+                    payload = response.json()
+                    sprites = payload.get('sprites',[])
+                    id_pokemon = payload['id']
+                    sprite = sprites['front_default']
+                    dir = {
+                        'name':name, 
+                        'sprite':sprite, 
+                        'id':id_pokemon
+                    }
+                    pokemon_info.append(dir)
+    return render(request,'pokemon/pokemon_listar.html',{'pokemon':pokemon_info})
 
-
-class GetPokemones(TemplateView):
-    template_name = 'pokemon/pokemon_listar.html'
-    
-    def get_context_data(self, *args, **kwargs):
-        context = {
-            'pokemones': get_pokemones(),
-
-        }
-        return context
-
-class PokemonDetalles(TemplateView):
-    template_name = 'pokemon/pokemon_detalles.html'
