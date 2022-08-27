@@ -1,0 +1,45 @@
+{% extends 'base/base.html' %} {% block content %}
+<div class="mb-3 mt-4">
+  <h3>Lista de Pokemones</h3>
+</div>
+
+{% if pokemon %}
+
+<div class="row p-3 text-center">
+  {% for pokemon in pokemon%}
+  <div class="col-sm-6 mb-5">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">{{pokemon.name}}</h5>
+        <div class="text-center">
+          <img src="{{pokemon.sprite}}" class="rounded" alt="...">
+        </div>
+        <a href="{%url 'pokemon_detalle' pokemon.id%}" class="btn btn-primary">Ver pokemon</a>
+      </div>
+    </div>
+  </div>
+  {%endfor%}
+  {% for pokemon in pokemon%}
+  <div class="col-sm-6 mb-5">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">{{pokemon.name}}</h5>
+        <div class="text-center">
+          <img src="{{pokemon.sprite}}" class="rounded" alt="...">
+        </div>
+        <a href="{%url 'pokemon_detalle' pokemon.id%}" class="btn btn-primary">Ver pokemon</a>
+      </div>
+    </div>
+  </div>
+  {%endfor%}
+</div>
+
+<div class="col-sm-12">
+  <div class="row p-20 text-center">
+    <a href="#" class="btn btn-primary">Ver pokemon</a>
+  </div>
+</div>
+
+{% else %}
+<h1>No hay registros de solicitudes</h1>
+{% endif %}{% endblock %}
