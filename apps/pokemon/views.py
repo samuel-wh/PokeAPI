@@ -12,9 +12,11 @@ def pokemon_list(request):
     # Endpoint
     url = "https://pokeapi.co/api/v2/pokemon/?limit=10"
     response = requests.get(url)
+  
     if response.status_code == 200:
         
         payload = response.json()
+   
         results = payload.get('results',[])
         
         if results:
@@ -37,22 +39,20 @@ def pokemon_list(request):
     return render(request,'pokemon/index.html',{'pokemon':pokemon_info})
 
 
-def type_list(request,nombre):
+def type_list(request,id_tipo):
     # Endpoint
-    url = "https://pokeapi.co/api/v2/pokemon/"
-    url+=id_pokemon
+    url = "https://pokeapi.co/api/v2/type/"
+    url+=id_tipo
     response = requests.get(url)
     if response.status_code == 200:
         payload = response.json()
-        print(payload.keys())
-        """ results = payload.get('results',[])
-        
-        if results:
+        pokemones = payload.get('pokemon',[])
+        if pokemones:
             pokemon_info = []
             dir = {}
-            for pokemon in results:
-                name = pokemon['name']
-                response = requests.get(pokemon['url'])
+            for pokemones in pokemones:
+                name = pokemones['name']
+                response = requests.get(pokemones['url'])
                 if response.status_code == 200:
                     payload = response.json()
                     sprites = payload.get('sprites',[])
@@ -64,7 +64,9 @@ def type_list(request,nombre):
                         'id':id_pokemon
                     }
                     pokemon_info.append(dir)
-    return render(request,'pokemon/index.html',{'pokemon':pokemon_info}) """
+
+    return render(request,'pokemon/index.html',{'pokemon':pokemon_info})
+
 
 def pokemon_details(request, id_pokemon):
     
@@ -86,25 +88,6 @@ def pokemon_details(request, id_pokemon):
             'altura':height,
             'nombre':name
         }
-    
-
-        types = payload.get('types',[])
-        if types:
-            type_list = []
-            type_dir = {}
-            for types in types:
-                type = types['type']
-                response.request.get(type['url'])
-                if response.status_code == 200:
-                    payload = response.json()
-                    id_tipo = payload['id']
-            type_dir = {'type':type}
-            type_list.append(type_dir)
-
-                
-
-        print("\n")
-        print(type_list)     
 
         abilities = payload.get('abilities',[])
         if abilities:
@@ -112,15 +95,30 @@ def pokemon_details(request, id_pokemon):
             ability_dir = {}
             for abilities in abilities:
                 ability = abilities['ability']
-                ability_dir = {'ability':ability}
+                ability_dir = {'habilidad':ability}
                 ability_list.append(ability_dir)
+
+        types = payload.get('types',[])
+        if types:
+            type_list = []
+            type_dir = {}
+            for types in types:
+                type = types['type']
+                response = requests.get(type['url'])
+                if response.status_code == 200:
+                    payload = response.json()
+                    print(payload.keys())
+                    id_tipo = payload['id']
+                    type_dir = {'type':type,'id':id_tipo}
+                    type_list.append(type_dir)
+                    print(type_list)
 
         moves = payload.get('moves',[])
         if moves:
             move_list = []
             move_dir = {}
             for moves in moves:
-                move = moves['move']
-                move_dir = {'move':move}
+                move_dir = {'move':moves}
                 move_list.append(move_dir) 
+    
     return render(request, 'pokemon/pokemon_detalles.html', {'detalle':dir1, 'tipos':type_list, 'habilidades':ability_list, 'movimientos':move_list})
