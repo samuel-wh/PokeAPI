@@ -10,7 +10,7 @@ def index(request):
 
 def pokemon_list(request):
     # Endpoint
-    url = "https://pokeapi.co/api/v2/pokemon/?limit=10"
+    url = "https://pokeapi.co/api/v2/pokemon/?limit=90"
     response = requests.get(url)
   
     if response.status_code == 200:
@@ -41,20 +41,24 @@ def pokemon_list(request):
 
 def type_list(request,id_tipo):
     # Endpoint
+    limit = "?limit=10"
     url = "https://pokeapi.co/api/v2/type/"
     url+=id_tipo
+    print(url)
     response = requests.get(url)
     if response.status_code == 200:
         payload = response.json()
         pokemones = payload.get('pokemon',[])
+        
         if pokemones:
             pokemon_info = []
             dir = {}
             for pokemones in pokemones:
-                name = pokemones['name']
-                response = requests.get(pokemones['url'])
+                pokemon = pokemones['pokemon']
+                response = requests.get(pokemon['url'])
                 if response.status_code == 200:
                     payload = response.json()
+                    name = payload['name']
                     sprites = payload.get('sprites',[])
                     id_pokemon = payload.get('id',[])
                     sprite = sprites['front_default']
@@ -64,7 +68,7 @@ def type_list(request,id_tipo):
                         'id':id_pokemon
                     }
                     pokemon_info.append(dir)
-
+        print(pokemon)
     return render(request,'pokemon/index.html',{'pokemon':pokemon_info})
 
 
@@ -107,11 +111,9 @@ def pokemon_details(request, id_pokemon):
                 response = requests.get(type['url'])
                 if response.status_code == 200:
                     payload = response.json()
-                    print(payload.keys())
                     id_tipo = payload['id']
                     type_dir = {'type':type,'id':id_tipo}
                     type_list.append(type_dir)
-                    print(type_list)
 
         moves = payload.get('moves',[])
         if moves:

@@ -1,60 +1,42 @@
 {% extends 'base/base.html' %} {% block content %}
 
 <div class="row justify-content-md-center">
-  {% comment %}
-  <div class="col-md-auto">
-    Variable width content
-    <div clas="col align-self-center">
-      <div class="card" style="width: 18rem">
-        <img src="{{detalle.img}}" class="card-img-top" alt="..." />
-        <div class="card-body">
-          <h5 class="card-title">{{detalle.nombre}}</h5>
-          <div class="card-text">
-            <ul class="list-group list-group-flush">
-              <li class="list-group-item">An item</li>
-              <li class="list-group-item">A second item</li>
-              <li class="list-group-item">A third item</li>
-              <li class="list-group-item">A fourth item</li>
-              <li class="list-group-item">And a fifth one</li>
-            </ul>
-          </div>
-          <a href="#" class="btn btn-primary">Go somewhere</a>
-        </div>
-      </div>
-    </div>
-  </div>
-  {% endcomment %}
-  <div class="card mb-3">
+  <div class="card mb-3 p-5 border-info">
     <h3 class="card-title">{{detalle.nombre}}</h3>
-    <img
-      src="{{detalle.img}}"
-      style="width: 18rem"
-      class="card-img-top rounded mx-auto d-block"
-      alt="..."
-    />
-    <div class="card-body">
-      <h4 class="card-title text-start">Detalles:</h4>
-      <h5 class="card-title text-start">Peso:</h5>
-      <p class="card-text text-start">{{detalle.peso}}</p>
-      <h5 class="card-title text-start">Altura:</h5>
-      <p class="card-text text-start">{{detalle.altura}}</p>
-      <h5 class="card-title text-start">Tipo:</h5>
+    <div class="row g-0">
+      <div class="col-md-4">
+        <img src="{{detalle.img}}" style="width: 18rem" class="card-img-top rounded mx-auto d-block" alt="..." />
+      </div>
+      <div class="col-md-8">
+        <div class="card-body">
+          <h4 class="card-title text-start">Detalles:</h4>
+          <h5 class="card-title text-start">Peso:</h5>
+          <p class="card-text text-start">{{detalle.peso}}</p>
+          <h5 class="card-title text-start">Altura:</h5>
+          <p class="card-text text-start">{{detalle.altura}}</p>
+          <h5 class="card-title text-start">Tipo:</h5>
 
-      {%if tipos%} {%for tipos in tipos%}
-      <p class="card-text text-start">
-        <a href="{%url 'pokemon_tipo' tipos.id%}">{{tipos.type.name}}</a>
-      </p>
+          {%if tipos%} {%for tipos in tipos%}
+          <p class="card-text text-start">
+            <a href="{%url 'pokemon_tipo' tipos.id%}">{{tipos.type.name}}</a>
+          </p>
 
-      {%endfor%}{%endif%}
-      <h5 class="card-title text-start">Habilidades:</h5>
-      {%if habilidades%}{%for habilidades in habilidades%}
-      <p class="card-text text-start">{{habilidades.habilidad.name}}</p>
-      {%endfor%}{%endif%}
-      <h5 class="card-title text-start">Movimientos:</h5>
-      {%if movimientos%}{%for movimientos in movimientos%}
-      <p class="card-text text-start">{{movimientos.move.name}}</p>
-      {%endfor%}{%endif%}
+          {%endfor%}{%endif%}
+          <h5 class="card-title text-start">Habilidades:</h5>
+          {%if habilidades%}{%for habilidades in habilidades%}
+          <p class="card-text text-start">{{habilidades.habilidad.name}}</p>
+          {%endfor%}{%endif%}
+          <h5 class="card-title text-start">Movimientos:</h5>
+          {%if movimientos%}{%for movimientos in movimientos%}
+          <p class="card-text text-start">{{movimientos.move.name}}</p>
+          {%endfor%}{%endif%}
+        </div>
+
+      </div>
+
     </div>
+
+
   </div>
 </div>
 
