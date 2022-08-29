@@ -10,7 +10,7 @@ def index(request):
 
 def pokemon_list(request):
     # Endpoint
-    url = "https://pokeapi.co/api/v2/pokemon/?limit=90"
+    url = "https://pokeapi.co/api/v2/pokemon/?limit=10"
     response = requests.get(url)
   
     if response.status_code == 200:

@@ -10,26 +10,28 @@
       <div class="col-md-8">
         <div class="card-body">
           <h4 class="card-title text-start">Detalles:</h4>
-          <h5 class="card-title text-start">Peso:</h5>
-          <p class="card-text text-start">{{detalle.peso}}</p>
-          <h5 class="card-title text-start">Altura:</h5>
-          <p class="card-text text-start">{{detalle.altura}}</p>
+          <h5 class="card-title text-start">Peso: </h5>
+          <p class="card-title text-start">{{detalle.peso}}</p>
+          <h5 class="card-title text-start">Altura: </h5>
+          <p class="card-titile text-start">{{detalle.altura}}</p>
+
           <h5 class="card-title text-start">Tipo:</h5>
 
-          {%if tipos%} {%for tipos in tipos%}
-          <p class="card-text text-start">
-            <a href="{%url 'pokemon_tipo' tipos.id%}">{{tipos.type.name}}</a>
-          </p>
+          <p class="card-title text-start">{%if tipos%} {%for tipos in tipos%}<a
+              href="{%url 'pokemon_tipo' tipos.id%}">{{tipos.type.name}}, </a>{%endfor%}{%endif%}</p>
 
-          {%endfor%}{%endif%}
+
+
           <h5 class="card-title text-start">Habilidades:</h5>
-          {%if habilidades%}{%for habilidades in habilidades%}
-          <p class="card-text text-start">{{habilidades.habilidad.name}}</p>
-          {%endfor%}{%endif%}
+          <p class="card-title text-start">{%if habilidades%}{%for habilidades in habilidades%}
+            {{habilidades.habilidad.name}},
+            {%endfor%}{%endif%}</p>
+
           <h5 class="card-title text-start">Movimientos:</h5>
-          {%if movimientos%}{%for movimientos in movimientos%}
-          <p class="card-text text-start">{{movimientos.move.name}}</p>
-          {%endfor%}{%endif%}
+          <p class="card-title text-start">{%if movimientos%}{%for movimientos in movimientos%}
+            {{movimientos.move.name}},
+            {%endfor%}{%endif%}</p>
+
         </div>
 
       </div>
