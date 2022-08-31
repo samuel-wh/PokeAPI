@@ -1,8 +1,11 @@
 {% extends 'base/base.html' %} {% block content %}
 
+{% if detalle and tipos%}
 <div class="row justify-content-md-center">
   <div class="card mb-3 p-5 border-info">
-    <h3 class="card-title">{{detalle.nombre}}</h3>
+    <div class="title">
+      <h3 class="card-title">{{detalle.nombre}}</h3>
+    </div>
     <div class="row g-0">
       <div class="col-md-4">
         <img src="{{detalle.img}}" style="width: 18rem" class="card-img-top rounded mx-auto d-block" alt="..." />
@@ -40,6 +43,16 @@
 
 
   </div>
+  <div class="row">
+
+    <div class="col-md-4 offset-md-4 p-3">
+
+      <a href="{%url 'pokemon_listar'%}" class="btn btn-secondary p-3">Inicio</a>
+    </div>
+  </div>
 </div>
+{%else%}
+<h1>No se encontro el pokemon</h1>
+{%endif%}
 
 {% endblock %}

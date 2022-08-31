@@ -5,5 +5,5 @@ urlpatterns = [
     
     url(r'^$', pokemon_list, name='pokemon_listar'),
     url(r'^detalle/(?P<id_pokemon>\d+)/$', pokemon_details, name='pokemon_detalle'),
-    url(r'^pokemones/tipo/(?P<id_tipo>\d+)/$', type_list, name='pokemon_tipo'),
+    url(r'^tipo/(?P<id_tipo>\d+)/$', type_list, name='pokemon_tipo'),
 ]

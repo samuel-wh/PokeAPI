@@ -1,5 +1,6 @@
 
 from django.shortcuts import render
+from django.core.urlresolvers import reverse
 import requests
 
 
@@ -7,79 +8,71 @@ import requests
 def index(request):
     return render(request, 'base/base.html')
 
+def pokemon_data(results):
+    pokemon_info = []
+    for pokemon in results:
+        name = pokemon['name']
+        response = requests.get(pokemon['url'])
+        if response.status_code == 200:
+            payload = response.json()
+            sprites = payload.get('sprites',[])
+            id_pokemon = payload.get('id',[])
+            sprite = sprites['front_default']
+            dir = {
+                'name':name, 
+                'sprite':sprite, 
+                'id':id_pokemon,    
+            }
+            pokemon_info.append(dir)
+
+    return pokemon_info
 
 def pokemon_list(request):
     # Endpoint
-    url = "https://pokeapi.co/api/v2/pokemon/?limit=10"
+    offset= request.GET.get("offset",0)
+    limit = request.GET.get("limit", 10)
+    url = "https://pokeapi.co/api/v2/pokemon/?offset={}&limit={}".format(offset, limit)
+    
     response = requests.get(url)
-  
+    pokemon_info = []
     if response.status_code == 200:
-        
         payload = response.json()
-   
         results = payload.get('results',[])
-        
+        siguiente = payload['next']
+        anterior = payload['previous']
+        if anterior:
+            anterior = reverse("pokemon_listar") + "?" + (anterior.split("?"))[1]
+        dir2 = {
+            'next': reverse("pokemon_listar") + "?" + (siguiente.split("?"))[1],
+            'previous': anterior
+        }
         if results:
-            pokemon_info = []
-            dir = {}
-            for pokemon in results:
-                name = pokemon['name']
-                response = requests.get(pokemon['url'])
-                if response.status_code == 200:
-                    payload = response.json()
-                    sprites = payload.get('sprites',[])
-                    id_pokemon = payload.get('id',[])
-                    sprite = sprites['front_default']
-                    dir = {
-                        'name':name, 
-                        'sprite':sprite, 
-                        'id':id_pokemon
-                    }
-                    pokemon_info.append(dir)
-    return render(request,'pokemon/index.html',{'pokemon':pokemon_info})
-
+            pokemon_info = pokemon_data(results)
+    return render(request,'pokemon/index.html',{'pokemon':pokemon_info,'direccion':dir2})
 
 def type_list(request,id_tipo):
     # Endpoint
-    limit = "?limit=10"
-    url = "https://pokeapi.co/api/v2/type/"
-    url+=id_tipo
-    print(url)
+    url = "https://pokeapi.co/api/v2/type/{}".format(id_tipo)
     response = requests.get(url)
+    pokemon_info = []
+    pokemon = []
     if response.status_code == 200:
         payload = response.json()
         pokemones = payload.get('pokemon',[])
-        
         if pokemones:
-            pokemon_info = []
-            dir = {}
             for pokemones in pokemones:
-                pokemon = pokemones['pokemon']
-                response = requests.get(pokemon['url'])
-                if response.status_code == 200:
-                    payload = response.json()
-                    name = payload['name']
-                    sprites = payload.get('sprites',[])
-                    id_pokemon = payload.get('id',[])
-                    sprite = sprites['front_default']
-                    dir = {
-                        'name':name, 
-                        'sprite':sprite, 
-                        'id':id_pokemon
-                    }
-                    pokemon_info.append(dir)
-        print(pokemon)
-    return render(request,'pokemon/index.html',{'pokemon':pokemon_info})
-
-
+                pokemon.append(pokemones['pokemon'])
+            pokemon_info = pokemon_data(pokemon)
+    return render(request,'pokemon/pokemon_tipo.html',{'pokemon':pokemon_info})
 def pokemon_details(request, id_pokemon):
-    
+    args = id_pokemon
     url = "https://pokeapi.co/api/v2/pokemon/"
-    id_pokemon
-    url+=id_pokemon
+    url+= args
+    ability_list = []
+    type_list = []
+    move_list = []
     response = requests.get(url)
     if response.status_code == 200:
-        dir1 = {}
         payload = response.json()
         name = payload['name']
         sprites = payload.get('sprites',[])
@@ -95,17 +88,12 @@ def pokemon_details(request, id_pokemon):
 
         abilities = payload.get('abilities',[])
         if abilities:
-            ability_list = []
-            ability_dir = {}
             for abilities in abilities:
                 ability = abilities['ability']
                 ability_dir = {'habilidad':ability}
                 ability_list.append(ability_dir)
-
         types = payload.get('types',[])
         if types:
-            type_list = []
-            type_dir = {}
             for types in types:
                 type = types['type']
                 response = requests.get(type['url'])
@@ -117,10 +105,9 @@ def pokemon_details(request, id_pokemon):
 
         moves = payload.get('moves',[])
         if moves:
-            move_list = []
-            move_dir = {}
             for moves in moves:
                 move_dir = {'move':moves}
                 move_list.append(move_dir) 
-    
+    else:
+        dir1 = {}
     return render(request, 'pokemon/pokemon_detalles.html', {'detalle':dir1, 'tipos':type_list, 'habilidades':ability_list, 'movimientos':move_list})
